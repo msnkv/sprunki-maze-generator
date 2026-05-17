@@ -1243,7 +1243,7 @@ const SHAPE_DEFS = {
 // EXERCISE RENDERER
 // ==========================================================
 function renderMirrorExercise(ctx, x, y, w, h, config) {
-  const { shape = 'bunny', guideDots = 10, showHint = true, showGrid = true } = config;
+  const { shape = 'bunny', guideDots = 10, showHint = true, showGrid = true, accentColor = '#9c27b0' } = config;
   const shapeDef = SHAPE_DEFS[shape] || SHAPE_DEFS.bunny;
   const cx = x + w / 2;
   const hintH = showHint ? Math.min(h * 0.1, 50) : 0;
@@ -1262,11 +1262,13 @@ function renderMirrorExercise(ctx, x, y, w, h, config) {
       }
   }
 
+  // Left half: full colored shape
   ctx.save();
   ctx.beginPath(); ctx.rect(x, y, w / 2, h); ctx.clip();
   shapeDef.draw(ctx, cx, cy, sz);
   ctx.restore();
 
+  // Center divider
   ctx.save();
   ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
   ctx.setLineDash([8, 6]);
@@ -1274,15 +1276,34 @@ function renderMirrorExercise(ctx, x, y, w, h, config) {
   ctx.setLineDash([]);
   ctx.restore();
 
-  const allPts = shapeDef.keyPoints(cx, cy, sz);
-  const shown = samplePts(allPts, Math.min(guideDots, allPts.length));
-  for (const [px, py] of shown) {
-    ctx.save();
-    ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2);
-    ctx.fillStyle = '#333'; ctx.fill();
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-    ctx.restore();
-  }
+  // Right half: dashed outline guide via Proxy
+  // guideDots 3-20: thin→thick dash, easy to control difficulty
+  const t = (guideDots - 3) / 17; // 0..1
+  const guideLineWidth = 1.2 + t * 5.8;   // 1.2 → 7 px
+  const dashLen        = 5  + t * 18;      // 5  → 23 px
+  const gapLen         = 22 - t * 15;      // 22 → 7  px
+  const guideColor     = accentColor + 'bb'; // accent semi-transparent
+
+  ctx.save();
+  ctx.beginPath(); ctx.rect(cx, y, w / 2, h); ctx.clip();
+  ctx.setLineDash([dashLen, gapLen]);
+
+  const proxyCtx = new Proxy(ctx, {
+    set(target, prop, value) {
+      if (prop === 'fillStyle')   return true;            // suppress fills
+      if (prop === 'strokeStyle') { target[prop] = guideColor;     return true; }
+      if (prop === 'lineWidth')   { target[prop] = guideLineWidth; return true; }
+      target[prop] = value; return true;
+    },
+    get(target, prop) {
+      if (prop === 'fill' || prop === 'fillRect' || prop === 'fillText') return () => {};
+      const val = target[prop];
+      return typeof val === 'function' ? val.bind(target) : val;
+    },
+  });
+
+  shapeDef.draw(proxyCtx, cx, cy, sz);
+  ctx.restore(); // clears clip + dash pattern
 
   if (showHint && shapeDef.hint) {
     ctx.save();

@@ -41,12 +41,12 @@ export default function MirrorPanel({ config, setConfig, children }) {
         </div>
 
         <SliderField
-          label={`Опорных точек: ${config.guideDots}`}
+          label={`Толщина линии-подсказки: ${config.guideDots}`}
           value={config.guideDots} min={3} max={20}
           onChange={v => setConfig({ guideDots: v })}
         />
         <div style={{ fontSize: 11, color: '#888', marginTop: -4, marginBottom: 8 }}>
-          3 = сложнее (старшие), 20 = легче (малыши)
+          3 = тонкая (сложнее), 20 = толстая (легче)
         </div>
 
         <ToggleRow label="💬 Подсказка снизу" checked={config.showHint} onChange={() => setConfig({ showHint: !config.showHint })} />
