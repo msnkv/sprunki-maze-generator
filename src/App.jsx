@@ -1,29 +1,41 @@
 import { useState } from 'react';
-import { useMazeConfig }    from './hooks/useMazeConfig.js';
-import { useMirrorConfig }  from './hooks/useMirrorConfig.js';
-import { useFindConfig }    from './hooks/useFindConfig.js';
-import ControlPanel         from './components/ControlPanel.jsx';
-import MazePreview          from './components/MazePreview.jsx';
-import ExportButtons        from './components/ExportButtons.jsx';
-import MirrorPanel          from './components/MirrorPanel.jsx';
-import MirrorPreview        from './components/MirrorPreview.jsx';
-import MirrorExportButtons  from './components/MirrorExportButtons.jsx';
-import FindPanel            from './components/FindPanel.jsx';
-import FindPreview          from './components/FindPreview.jsx';
-import FindExportButtons    from './components/FindExportButtons.jsx';
+import { useMazeConfig }          from './hooks/useMazeConfig.js';
+import { useMirrorConfig }        from './hooks/useMirrorConfig.js';
+import { useFindConfig }          from './hooks/useFindConfig.js';
+import { useConnectDotsConfig }   from './hooks/useConnectDotsConfig.js';
+import { useMissingConfig }       from './hooks/useMissingConfig.js';
+import ControlPanel               from './components/ControlPanel.jsx';
+import MazePreview                from './components/MazePreview.jsx';
+import ExportButtons              from './components/ExportButtons.jsx';
+import MirrorPanel                from './components/MirrorPanel.jsx';
+import MirrorPreview              from './components/MirrorPreview.jsx';
+import MirrorExportButtons        from './components/MirrorExportButtons.jsx';
+import FindPanel                  from './components/FindPanel.jsx';
+import FindPreview                from './components/FindPreview.jsx';
+import FindExportButtons          from './components/FindExportButtons.jsx';
+import ConnectDotsPanel           from './components/ConnectDotsPanel.jsx';
+import ConnectDotsPreview         from './components/ConnectDotsPreview.jsx';
+import ConnectDotsExportButtons   from './components/ConnectDotsExportButtons.jsx';
+import MissingPanel               from './components/MissingPanel.jsx';
+import MissingPreview             from './components/MissingPreview.jsx';
+import MissingExportButtons       from './components/MissingExportButtons.jsx';
 
 export default function App() {
   const [tab, setTab] = useState('maze');
-  const maze   = useMazeConfig();
-  const mirror = useMirrorConfig();
-  const find   = useFindConfig();
+  const maze        = useMazeConfig();
+  const mirror      = useMirrorConfig();
+  const find        = useFindConfig();
+  const connectDots = useConnectDotsConfig();
+  const missing     = useMissingConfig();
 
   return (
     <div>
       <div style={tabBar}>
-        <button onClick={() => setTab('maze')}   style={tabBtn(tab === 'maze')}>🌀 Лабиринты</button>
-        <button onClick={() => setTab('mirror')} style={tabBtn(tab === 'mirror')}>🪞 Зеркальный художник</button>
-        <button onClick={() => setTab('find')}   style={tabBtn(tab === 'find')}>🔍 Спаси друга</button>
+        <button onClick={() => setTab('maze')}         style={tabBtn(tab === 'maze')}>🌀 Лабиринты</button>
+        <button onClick={() => setTab('mirror')}       style={tabBtn(tab === 'mirror')}>🪞 Зеркальный художник</button>
+        <button onClick={() => setTab('find')}         style={tabBtn(tab === 'find')}>🔍 Спаси друга</button>
+        <button onClick={() => setTab('connectDots')}  style={tabBtn(tab === 'connectDots')}>✏️ Соедини точки</button>
+        <button onClick={() => setTab('missing')}      style={tabBtn(tab === 'missing')}>❓ Чего не хватает?</button>
       </div>
 
       {tab === 'maze' && (
@@ -64,6 +76,34 @@ export default function App() {
           <div style={preview}>
             <div style={previewLabel}>Превью первой страницы</div>
             <FindPreview config={find.config} />
+          </div>
+        </div>
+      )}
+
+      {tab === 'connectDots' && (
+        <div style={layout}>
+          <div style={side}>
+            <ConnectDotsPanel config={connectDots.config} setConfig={connectDots.setConfig}>
+              <ConnectDotsExportButtons config={connectDots.config} setConfig={connectDots.setConfig} />
+            </ConnectDotsPanel>
+          </div>
+          <div style={preview}>
+            <div style={previewLabel}>Превью первой страницы</div>
+            <ConnectDotsPreview config={connectDots.config} />
+          </div>
+        </div>
+      )}
+
+      {tab === 'missing' && (
+        <div style={layout}>
+          <div style={side}>
+            <MissingPanel config={missing.config} setConfig={missing.setConfig}>
+              <MissingExportButtons config={missing.config} setConfig={missing.setConfig} />
+            </MissingPanel>
+          </div>
+          <div style={preview}>
+            <div style={previewLabel}>Превью первой страницы</div>
+            <MissingPreview config={missing.config} />
           </div>
         </div>
       )}
