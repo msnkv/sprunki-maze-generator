@@ -58,7 +58,7 @@ export default function App() {
         <div style={layout}>
           <div style={side}>
             <FindPanel config={find.config} setConfig={find.setConfig}>
-              <FindExportButtons config={find.config} />
+              <FindExportButtons config={find.config} setConfig={find.setConfig} />
             </FindPanel>
           </div>
           <div style={preview}>

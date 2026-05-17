@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
   pages: 1,
   pageTitle: 'Спаси друга',
   accentColor: '#e53935',
+  seed: 0,
 };
 
 function load() {

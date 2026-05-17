@@ -63,10 +63,13 @@ function doSave(config) {
   URL.revokeObjectURL(a.href);
 }
 
-export default function FindExportButtons({ config }) {
+export default function FindExportButtons({ config, setConfig }) {
   const [pdfStatus, setPdfStatus] = useState('idle');
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <button onClick={() => setConfig({ seed: (config.seed || 0) + 1 })} style={btn('#388e3c')}>
+        🎲 Перегенерировать
+      </button>
       <button onClick={() => doPDF(config, setPdfStatus)} disabled={pdfStatus === 'generating'}
         style={btn('#1565c0', pdfStatus === 'generating')}>
         {pdfStatus === 'generating' ? '⏳ Генерация PDF...' : '📄 Скачать PDF'}

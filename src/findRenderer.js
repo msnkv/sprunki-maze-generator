@@ -215,7 +215,7 @@ const LABELS = {
 
 // ─── Background noise ───────────────────────────────────────────────────────
 
-function drawNoise(ctx, rx, ry, rw, rh, density, seed) {
+function drawNoise(ctx, rx, ry, rw, rh, density, seed, decoyKeys = [], szPx = 60) {
   const rng = mkRng(seed);
   const sc = rw / 750;
   ctx.save();
@@ -299,6 +299,21 @@ function drawNoise(ctx, rx, ry, rw, rh, density, seed) {
     ctx.stroke();
   }
 
+  // Decoy shapes — same outline functions as hidden chars but noise-colored,
+  // so angular shapes exist everywhere and hidden ones don't stand out by shape type
+  if (decoyKeys.length > 0) {
+    const drng = mkRng(seed + 33333);
+    const decoyCount = Math.round(5 + density * 6);
+    ctx.lineWidth = 1.7 * sc;
+    for (let i = 0; i < decoyCount; i++) {
+      const key = decoyKeys[Math.floor(drng() * decoyKeys.length)];
+      const cx = rx + (0.06 + drng() * 0.88) * rw;
+      const cy = ry + (0.06 + drng() * 0.88) * rh;
+      const sz = szPx * (0.55 + drng() * 0.9);
+      if (OUTLINES[key]) OUTLINES[key](ctx, cx, cy, sz);
+    }
+  }
+
   ctx.restore();
 }
 
@@ -340,13 +355,14 @@ export function renderFindPage(ctx, config, pageIndex) {
     availableShapes = Object.keys(OUTLINES),
     pageTitle     = 'Спаси друга',
     accentColor   = '#e53935',
+    seed: userSeed = 0,
   } = config;
 
   const W = ctx.canvas.width, H = ctx.canvas.height;
   const pxmm = W / 210;
   const pad  = 8 * pxmm;
 
-  const seed = (pageIndex + 1) * 7919 + 42;
+  const seed = (pageIndex + 1) * 7919 + 42 + userSeed * 1337;
   const rng  = mkRng(seed);
 
   // Background
@@ -393,6 +409,10 @@ export function renderFindPage(ctx, config, pageIndex) {
   const shuffled = [...avail].sort(() => rng() - 0.5);
   const keys     = shuffled.slice(0, Math.min(hiddenCount, avail.length));
 
+  // Decoy keys: all outline shapes NOT chosen as hidden (visual camouflage)
+  const allOutlineKeys = Object.keys(OUTLINES);
+  const decoyKeys = allOutlineKeys.filter(k => !keys.includes(k));
+
   // Positions
   const positions = placeShapes(keys.length, contentX, contentTop, contentW, contentH, szPx, seed);
 
@@ -406,7 +426,7 @@ export function renderFindPage(ctx, config, pageIndex) {
   ctx.clip();
 
   // Layer 1: noise behind shapes (60%)
-  drawNoise(ctx, contentX, contentTop, contentW, contentH, density * 0.6, seed + 10);
+  drawNoise(ctx, contentX, contentTop, contentW, contentH, density * 0.6, seed + 10, decoyKeys, szPx);
 
   // Hidden shapes (slightly darker than noise, same weight → "hidden in plain sight")
   ctx.save();
@@ -421,7 +441,7 @@ export function renderFindPage(ctx, config, pageIndex) {
   ctx.restore();
 
   // Layer 2: noise on top of shapes (40%) — lines "pass through" characters
-  drawNoise(ctx, contentX, contentTop, contentW, contentH, density * 0.4, seed + 20);
+  drawNoise(ctx, contentX, contentTop, contentW, contentH, density * 0.4, seed + 20, decoyKeys, szPx);
 
   ctx.restore(); // end clip
 
