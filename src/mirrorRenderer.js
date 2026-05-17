@@ -597,6 +597,569 @@ const SHAPE_DEFS = {
     }
   },
 
+  minion: {
+    label: 'Миньон',
+    hint: '💛 Дорисуй вторую половину Миньона!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      ctx.fillStyle = '#fdd835';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.08, sz*0.44, sz*0.68, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Комбинезон
+      ctx.fillStyle = '#1565c0';
+      ctx.beginPath(); ctx.rect(cx-sz*0.44, cy+sz*0.2, sz*0.88, sz*0.56); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.76, sz*0.44, sz*0.12, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.rect(cx-sz*0.44, cy+sz*0.2, sz*0.88, sz*0.56); ctx.fill(); ctx.stroke();
+      // Лямки (симметричные)
+      for (const ex of [-0.17, 0.17]) {
+        ctx.fillStyle = '#1565c0';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.055, cy-sz*0.18, sz*0.11, sz*0.4); ctx.fill(); ctx.stroke();
+      }
+      // Карман по центру
+      ctx.fillStyle = '#1976d2';
+      ctx.beginPath(); ctx.rect(cx-sz*0.11, cy+sz*0.32, sz*0.22, sz*0.16); ctx.fill(); ctx.stroke();
+      // Полоска очков
+      ctx.fillStyle = '#9e9e9e';
+      ctx.beginPath(); ctx.rect(cx-sz*0.46, cy-sz*0.5, sz*0.92, sz*0.2); ctx.fill(); ctx.stroke();
+      // Очки (симметричные)
+      for (const ex of [-0.2, 0.2]) {
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(cx+ex*sz, cy-sz*0.38, sz*0.19, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#6d4c41';
+        ctx.beginPath(); ctx.arc(cx+ex*sz, cy-sz*0.38, sz*0.12, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#111';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+sz*0.04, cy-sz*0.42, sz*0.055, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+sz*0.08, cy-sz*0.46, sz*0.028, 0, Math.PI*2); ctx.fill();
+      }
+      // Рот
+      ctx.strokeStyle = '#222'; ctx.lineWidth = sz*0.04;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.13, sz*0.14, 0.25, Math.PI-0.25); ctx.stroke();
+      // Волосы (3 штуки)
+      ctx.strokeStyle = '#333'; ctx.lineWidth = sz*0.045; ctx.lineCap = 'round';
+      for (const ex of [-0.12, 0, 0.12]) ctx.beginPath(), ctx.moveTo(cx+ex*sz, cy-sz*0.72), ctx.quadraticCurveTo(cx+ex*sz*1.2, cy-sz*0.95, cx+ex*sz*1.4, cy-sz*1.04), ctx.stroke();
+      // Ботинки
+      for (const ex of [-0.22, 0.22]) {
+        ctx.fillStyle = '#1565c0'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.88, sz*0.17, sz*0.1, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.44, cy+sz*0.08+Math.sin(a)*sz*0.68]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/6) { const px=cx+sz*0.2+Math.cos(a)*sz*0.19, py=cy-sz*0.38+Math.sin(a)*sz*0.19; if(px>=cx) pts.push([px,py]); }
+      pts.push([cx+sz*0.46, cy-sz*0.5],[cx+sz*0.46, cy-sz*0.3]);
+      pts.push([cx+sz*0.44, cy+sz*0.2],[cx+sz*0.44, cy+sz*0.76]);
+      for (let a=-Math.PI; a<=0; a+=Math.PI/4) pts.push([cx+sz*0.22+Math.cos(a)*sz*0.17, cy+sz*0.88+Math.sin(a)*sz*0.1]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  pikachu: {
+    label: 'Пикачу',
+    hint: '⚡ Дорисуй второе ушко Пикачу!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Уши (чёрные кончики)
+      for (const ex of [-0.28, 0.28]) {
+        ctx.fillStyle = '#fdd835';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy-sz*0.78, sz*0.12, sz*0.3, ex>0?0.25:-0.25, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#111';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy-sz*0.98, sz*0.08, sz*0.14, ex>0?0.25:-0.25, 0, Math.PI*2); ctx.fill();
+      }
+      // Голова
+      ctx.fillStyle = '#fdd835';
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.38, sz*0.38, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Тело
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.26, sz*0.38, sz*0.44, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Коричневые полоски на спине (симметричные)
+      ctx.strokeStyle = '#795548'; ctx.lineWidth = sz*0.06;
+      for (const ex of [-0.18, 0.18]) {
+        ctx.beginPath(); ctx.moveTo(cx+ex*sz, cy+sz*0.06); ctx.lineTo(cx+ex*sz, cy+sz*0.42); ctx.stroke();
+      }
+      // Красные щёчки (симметричные)
+      ctx.fillStyle = '#e53935';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.28, cy-sz*0.3, sz*0.12, sz*0.09, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+sz*0.28, cy-sz*0.3, sz*0.12, sz*0.09, 0, 0, Math.PI*2); ctx.fill();
+      // Глаза
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(cx-sz*0.14, cy-sz*0.44, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.14, cy-sz*0.44, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-sz*0.11, cy-sz*0.48, sz*0.03, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.11, cy-sz*0.48, sz*0.03, 0, Math.PI*2); ctx.fill();
+      // Нос
+      ctx.fillStyle = '#333'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw*0.6;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.35, sz*0.04, 0, Math.PI*2); ctx.fill();
+      // Улыбка
+      ctx.strokeStyle = '#222'; ctx.lineWidth = sz*0.04;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.25, sz*0.16, 0.2, Math.PI-0.2); ctx.stroke();
+      // Ручки
+      for (const ex of [-0.38, 0.38]) {
+        ctx.fillStyle = '#fdd835'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.18, sz*0.1, sz*0.22, ex>0?0.4:-0.4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Ножки
+      for (const ex of [-0.2, 0.2]) {
+        ctx.fillStyle = '#fdd835';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.78, sz*0.16, sz*0.12, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      for (let a=0; a<Math.PI*2; a+=Math.PI/8) { const px=cx+sz*0.28+Math.cos(a+0.25)*sz*0.12, py=cy-sz*0.78+Math.sin(a+0.25)*sz*0.3; if(px>=cx) pts.push([px,py]); }
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.38, cy-sz*0.38+Math.sin(a)*sz*0.38]);
+      pts.push([cx+sz*0.28, cy-sz*0.3]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.38, cy+sz*0.26+Math.sin(a)*sz*0.44]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/4) { const px=cx+sz*0.38+Math.cos(a+0.4)*sz*0.1, py=cy+sz*0.18+Math.sin(a+0.4)*sz*0.22; if(px>=cx) pts.push([px,py]); }
+      for (let a=-Math.PI; a<=0; a+=Math.PI/4) pts.push([cx+sz*0.2+Math.cos(a)*sz*0.16, cy+sz*0.78+Math.sin(a)*sz*0.12]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  alien: {
+    label: 'Пришелец',
+    hint: '👽 Дорисуй вторую половину пришельца!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Антенны
+      ctx.strokeStyle = '#222'; ctx.lineWidth = sz*0.04; ctx.lineCap = 'round';
+      for (const ex of [-0.22, 0.22]) {
+        ctx.beginPath(); ctx.moveTo(cx+ex*sz, cy-sz*0.72); ctx.quadraticCurveTo(cx+ex*sz*1.8, cy-sz*1.0, cx+ex*sz*2.0, cy-sz*1.14); ctx.stroke();
+        ctx.fillStyle = '#a5d6a7'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.arc(cx+ex*sz*2.0, cy-sz*1.14, sz*0.08, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Голова (большой яйцевидный купол)
+      ctx.fillStyle = '#a5d6a7';
+      ctx.beginPath(); ctx.ellipse(cx, cy-sz*0.3, sz*0.5, sz*0.58, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Тело (маленькое)
+      ctx.fillStyle = '#c8e6c9';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.42, sz*0.28, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Глаза (огромные, миндалевидные, симметричные)
+      for (const ex of [-0.2, 0.2]) {
+        ctx.fillStyle = '#111';
+        ctx.save(); ctx.translate(cx+ex*sz, cy-sz*0.28); ctx.rotate(ex>0?-0.35:0.35);
+        ctx.beginPath(); ctx.ellipse(0, 0, sz*0.2, sz*0.14, 0, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = '#1a237e';
+        ctx.save(); ctx.translate(cx+ex*sz+ex*sz*0.02, cy-sz*0.3); ctx.rotate(ex>0?-0.35:0.35);
+        ctx.beginPath(); ctx.ellipse(0, 0, sz*0.14, sz*0.1, 0, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+ex*sz*0.06, cy-sz*0.36, sz*0.05, 0, Math.PI*2); ctx.fill();
+      }
+      // Рот (тонкая линия)
+      ctx.strokeStyle = '#555'; ctx.lineWidth = sz*0.03;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.08, sz*0.12, 0.4, Math.PI-0.4); ctx.stroke();
+      // Ноздри
+      ctx.fillStyle = '#7cb87e';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.06, cy-sz*0.14, sz*0.03, sz*0.04, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+sz*0.06, cy-sz*0.14, sz*0.03, sz*0.04, 0, 0, Math.PI*2); ctx.fill();
+      // Длинные тонкие ручки
+      for (const ex of [-0.28, 0.28]) {
+        ctx.fillStyle = '#a5d6a7'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.38, sz*0.08, sz*0.28, ex>0?0.5:-0.5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz+(ex>0?sz*0.1:-sz*0.1), cy+sz*0.62, sz*0.12, sz*0.06, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Ножки
+      for (const ex of [-0.12, 0.12]) {
+        ctx.fillStyle = '#a5d6a7';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.06, cy+sz*0.74, sz*0.12, sz*0.22); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.96, sz*0.1, sz*0.07, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      pts.push([cx+sz*0.22*2.0, cy-sz*1.14]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.5, cy-sz*0.3+Math.sin(a)*sz*0.58]);
+      pts.push([cx+sz*0.2+sz*0.06, cy-sz*0.36]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.28, cy+sz*0.42+Math.sin(a)*sz*0.32]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/4) { const px=cx+sz*0.28+Math.cos(a+0.5)*sz*0.08, py=cy+sz*0.38+Math.sin(a+0.5)*sz*0.28; if(px>=cx) pts.push([px,py]); }
+      pts.push([cx+sz*0.12, cy+sz*0.74],[cx+sz*0.12, cy+sz*0.96],[cx+sz*0.22, cy+sz*0.96]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  robot: {
+    label: 'Робот',
+    hint: '🤖 Дорисуй вторую половину робота!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Антенна
+      ctx.fillStyle = '#90a4ae';
+      ctx.beginPath(); ctx.rect(cx-sz*0.04, cy-sz*1.06, sz*0.08, sz*0.22); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#ef5350';
+      ctx.beginPath(); ctx.arc(cx, cy-sz*1.1, sz*0.1, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Голова (квадратная)
+      ctx.fillStyle = '#90a4ae';
+      ctx.beginPath(); ctx.rect(cx-sz*0.42, cy-sz*0.84, sz*0.84, sz*0.66); ctx.fill(); ctx.stroke();
+      // Глаза (квадратные светящиеся, симметричные)
+      for (const ex of [-0.2, 0.2]) {
+        ctx.fillStyle = '#29b6f6';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.1, cy-sz*0.72, sz*0.2, sz*0.18); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+sz*0.06, cy-sz*0.67, sz*0.04, 0, Math.PI*2); ctx.fill();
+      }
+      // Рот (прямоугольный, с зубами)
+      ctx.fillStyle = '#333';
+      ctx.beginPath(); ctx.rect(cx-sz*0.22, cy-sz*0.36, sz*0.44, sz*0.14); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#29b6f6';
+      for (let i=0; i<4; i++) ctx.beginPath(), ctx.rect(cx-sz*0.2+i*sz*0.12, cy-sz*0.36, sz*0.09, sz*0.14), ctx.fill();
+      // Уши/динамики (симметричные)
+      for (const ex of [-0.42, 0.42]) {
+        ctx.fillStyle = '#607d8b';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-(ex>0?0:sz*0.12), cy-sz*0.64, sz*0.12, sz*0.28); ctx.fill(); ctx.stroke();
+      }
+      // Тело (прямоугольное)
+      ctx.fillStyle = '#78909c';
+      ctx.beginPath(); ctx.rect(cx-sz*0.38, cy-sz*0.18, sz*0.76, sz*0.72); ctx.fill(); ctx.stroke();
+      // Кнопки на теле (симметричные)
+      for (const [dx,dy,col] of [[-0.2,-0.04,'#ef5350'],[-0.2,0.12,'#66bb6a'],[0.2,-0.04,'#ef5350'],[0.2,0.12,'#66bb6a']]) {
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(cx+dx*sz, cy+dy*sz, sz*0.06, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Полоска по центру
+      ctx.fillStyle = '#546e7a';
+      ctx.beginPath(); ctx.rect(cx-sz*0.04, cy-sz*0.18, sz*0.08, sz*0.72); ctx.fill();
+      // Руки (прямоугольные, симметричные)
+      for (const ex of [-0.38, 0.38]) {
+        ctx.fillStyle = '#90a4ae';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-(ex>0?0:sz*0.16), cy-sz*0.14, sz*0.16, sz*0.48); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.rect(cx+ex*sz-(ex>0?0:sz*0.2), cy+sz*0.34, sz*0.2, sz*0.14); ctx.fill(); ctx.stroke();
+      }
+      // Ноги
+      for (const ex of [-0.2, 0.2]) {
+        ctx.fillStyle = '#607d8b';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.1, cy+sz*0.54, sz*0.2, sz*0.36); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.14, cy+sz*0.9, sz*0.28, sz*0.12); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      pts.push([cx, cy-sz*1.1],[cx, cy-sz*0.84]);
+      pts.push([cx+sz*0.42, cy-sz*0.84],[cx+sz*0.42, cy-sz*0.18]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/4) { const px=cx+sz*0.2+Math.cos(a)*sz*0.1, py=cy-sz*0.63+Math.sin(a)*sz*0.09; if(px>=cx) pts.push([px,py]); }
+      pts.push([cx+sz*0.54, cy-sz*0.64],[cx+sz*0.54, cy-sz*0.36]);
+      pts.push([cx+sz*0.38, cy-sz*0.18],[cx+sz*0.38, cy+sz*0.54]);
+      pts.push([cx+sz*0.54, cy-sz*0.14],[cx+sz*0.54, cy+sz*0.48]);
+      pts.push([cx+sz*0.3, cy+sz*0.54],[cx+sz*0.3, cy+sz*0.9],[cx+sz*0.34, cy+sz*1.02]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  snowman: {
+    label: 'Снеговик',
+    hint: '⛄ Дорисуй вторую половину снеговика!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Нижний шар
+      ctx.fillStyle = '#e3f2fd';
+      ctx.beginPath(); ctx.arc(cx, cy+sz*0.54, sz*0.42, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Средний шар
+      ctx.fillStyle = '#e3f2fd';
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.04, sz*0.32, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Голова
+      ctx.fillStyle = '#e3f2fd';
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.56, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Шапка
+      ctx.fillStyle = '#222';
+      ctx.beginPath(); ctx.rect(cx-sz*0.28, cy-sz*0.82, sz*0.56, sz*0.08); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.rect(cx-sz*0.18, cy-sz*1.08, sz*0.36, sz*0.28); ctx.fill(); ctx.stroke();
+      // Шарф (оранжевый)
+      ctx.fillStyle = '#ff7043';
+      ctx.beginPath(); ctx.ellipse(cx, cy-sz*0.3, sz*0.33, sz*0.08, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Глаза (симметричные)
+      ctx.fillStyle = '#222';
+      ctx.beginPath(); ctx.arc(cx-sz*0.1, cy-sz*0.62, sz*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.1, cy-sz*0.62, sz*0.05, 0, Math.PI*2); ctx.fill();
+      // Нос (морковка, по центру)
+      ctx.fillStyle = '#ff7043';
+      ctx.beginPath(); ctx.moveTo(cx, cy-sz*0.56); ctx.lineTo(cx-sz*0.04, cy-sz*0.5); ctx.lineTo(cx+sz*0.04, cy-sz*0.5); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // Пуговицы (по центру)
+      ctx.fillStyle = '#222';
+      for (const dy of [-0.06, 0.08, 0.22]) { ctx.beginPath(); ctx.arc(cx, cy+dy*sz, sz*0.04, 0, Math.PI*2); ctx.fill(); }
+      // Ветки-руки (симметричные)
+      ctx.strokeStyle = '#5d4037'; ctx.lineWidth = sz*0.06; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(cx-sz*0.32, cy-sz*0.06); ctx.lineTo(cx-sz*0.68, cy-sz*0.24); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+sz*0.32, cy-sz*0.06); ctx.lineTo(cx+sz*0.68, cy-sz*0.24); ctx.stroke();
+      // Пальцы веток
+      ctx.lineWidth = sz*0.04;
+      ctx.beginPath(); ctx.moveTo(cx+sz*0.56, cy-sz*0.18); ctx.lineTo(cx+sz*0.68, cy-sz*0.1); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+sz*0.56, cy-sz*0.18); ctx.lineTo(cx+sz*0.7, cy-sz*0.28); ctx.stroke();
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.42, cy+sz*0.54+Math.sin(a)*sz*0.42]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.32, cy-sz*0.04+Math.sin(a)*sz*0.32]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.24, cy-sz*0.56+Math.sin(a)*sz*0.24]);
+      pts.push([cx+sz*0.28, cy-sz*0.82],[cx+sz*0.18, cy-sz*1.08],[cx+sz*0.18, cy-sz*0.8]);
+      pts.push([cx+sz*0.68, cy-sz*0.24],[cx+sz*0.68, cy-sz*0.1],[cx+sz*0.7, cy-sz*0.28]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  sun: {
+    label: 'Солнышко',
+    hint: '☀️ Дорисуй правые лучики солнышка!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Лучи (симметричные)
+      ctx.strokeStyle = '#f9a825'; ctx.lineWidth = sz*0.08; ctx.lineCap = 'round';
+      const rays = 8;
+      for (let i=0; i<rays; i++) {
+        const a = (i/rays)*Math.PI*2;
+        ctx.beginPath();
+        ctx.moveTo(cx+Math.cos(a)*sz*0.46, cy+Math.sin(a)*sz*0.46);
+        ctx.lineTo(cx+Math.cos(a)*sz*0.78, cy+Math.sin(a)*sz*0.78);
+        ctx.stroke();
+      }
+      // Основной круг
+      ctx.fillStyle = '#fdd835'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+      ctx.beginPath(); ctx.arc(cx, cy, sz*0.44, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Глаза
+      ctx.fillStyle = '#333';
+      ctx.beginPath(); ctx.arc(cx-sz*0.14, cy-sz*0.1, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.14, cy-sz*0.1, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-sz*0.11, cy-sz*0.14, sz*0.03, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.11, cy-sz*0.14, sz*0.03, 0, Math.PI*2); ctx.fill();
+      // Улыбка
+      ctx.strokeStyle = '#e65100'; ctx.lineWidth = sz*0.05;
+      ctx.beginPath(); ctx.arc(cx, cy+sz*0.08, sz*0.2, 0.2, Math.PI-0.2); ctx.stroke();
+      // Румянец
+      ctx.fillStyle = 'rgba(255,152,0,0.4)';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.28, cy+sz*0.05, sz*0.1, sz*0.07, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+sz*0.28, cy+sz*0.05, sz*0.1, sz*0.07, 0, 0, Math.PI*2); ctx.fill();
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      const rays = 8;
+      for (let i=0; i<rays; i++) {
+        const a = (i/rays)*Math.PI*2;
+        const px = cx+Math.cos(a)*sz*0.78;
+        if (px >= cx) pts.push([px, cy+Math.sin(a)*sz*0.78]);
+      }
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.44, cy+Math.sin(a)*sz*0.44]);
+      pts.push([cx+sz*0.14, cy-sz*0.1]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  octopus: {
+    label: 'Осьминог',
+    hint: '🐙 Дорисуй правые щупальца осьминога!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      // Щупальца (4 пары, симметричные)
+      const tentacles = [[-0.62, 0.2, -0.88, 0.72], [-0.38, 0.4, -0.52, 0.9], [-0.16, 0.42, -0.18, 0.92], [0.16, 0.42, 0.18, 0.92], [0.38, 0.4, 0.52, 0.9], [0.62, 0.2, 0.88, 0.72]];
+      ctx.strokeStyle = '#f48fb1'; ctx.lineWidth = sz*0.1;
+      for (const [sx1, sy1, sx2, sy2] of tentacles) {
+        ctx.beginPath(); ctx.moveTo(cx+sx1*sz, cy+sy1*sz); ctx.quadraticCurveTo(cx+sx1*sz*1.2, cy+(sy1+sy2)/2*sz*1.1, cx+sx2*sz, cy+sy2*sz); ctx.stroke();
+      }
+      // Присоски на кончиках
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = '#f48fb1'; ctx.lineWidth = sz*0.04;
+      for (const [,, sx2, sy2] of tentacles) { ctx.beginPath(); ctx.arc(cx+sx2*sz, cy+sy2*sz, sz*0.06, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
+      // Голова/тело (купол)
+      ctx.fillStyle = '#f06292'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+      ctx.beginPath(); ctx.ellipse(cx, cy-sz*0.04, sz*0.56, sz*0.62, 0, Math.PI, 0); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.2, sz*0.56, sz*0.28, 0, 0, Math.PI); ctx.fill(); ctx.stroke();
+      // Пятнышко на теле
+      ctx.fillStyle = '#f8bbd0';
+      ctx.beginPath(); ctx.ellipse(cx, cy-sz*0.1, sz*0.3, sz*0.36, 0, 0, Math.PI*2); ctx.fill();
+      // Глаза (большие, симметричные)
+      for (const ex of [-0.22, 0.22]) {
+        ctx.fillStyle = '#fff'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.arc(cx+ex*sz, cy-sz*0.2, sz*0.18, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#333';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+sz*0.04, cy-sz*0.22, sz*0.09, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(cx+ex*sz+sz*0.08, cy-sz*0.27, sz*0.04, 0, Math.PI*2); ctx.fill();
+      }
+      // Улыбка
+      ctx.strokeStyle = '#ad1457'; ctx.lineWidth = sz*0.04;
+      ctx.beginPath(); ctx.arc(cx, cy+sz*0.06, sz*0.16, 0.3, Math.PI-0.3); ctx.stroke();
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      const rightTentacles = [[0.16, 0.42, 0.18, 0.92], [0.38, 0.4, 0.52, 0.9], [0.62, 0.2, 0.88, 0.72]];
+      for (const [sx1,sy1,sx2,sy2] of rightTentacles) {
+        pts.push([cx+sx1*sz, cy+sy1*sz],[cx+sx2*sz, cy+sy2*sz]);
+        for (let t=0.25; t<1; t+=0.25) { pts.push([cx+(sx1+t*(sx2*1.2-sx1))*sz, cy+(sy1+t*((sy1+sy2)/2*1.1-sy1))*sz]); }
+      }
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.56, cy-sz*0.04+Math.sin(a)*sz*0.62]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/6) { const px=cx+sz*0.22+Math.cos(a)*sz*0.18, py=cy-sz*0.2+Math.sin(a)*sz*0.18; if(px>=cx) pts.push([px,py]); }
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  turtle: {
+    label: 'Черепаха',
+    hint: '🐢 Дорисуй правую половину черепахи!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Лапки (4 штуки, симметричные)
+      for (const [ex, ey, ang] of [[-0.5, -0.22, -0.5], [0.5, -0.22, 0.5], [-0.42, 0.38, 0.5], [0.42, 0.38, -0.5]]) {
+        ctx.fillStyle = '#66bb6a';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+ey*sz, sz*0.18, sz*0.12, ang, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Хвост
+      ctx.fillStyle = '#66bb6a';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.5, sz*0.08, sz*0.14, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Панцирь (большой овал)
+      ctx.fillStyle = '#388e3c';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.04, sz*0.52, sz*0.46, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Узор панциря (гексагональный, симметричный)
+      ctx.strokeStyle = '#1b5e20'; ctx.lineWidth = sz*0.03;
+      ctx.beginPath(); ctx.arc(cx, cy, sz*0.22, 0, Math.PI*2); ctx.stroke();
+      for (let a=0; a<Math.PI*2; a+=Math.PI/3) {
+        ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*sz*0.22, cy+Math.sin(a)*sz*0.22);
+        ctx.lineTo(cx+Math.cos(a)*sz*0.48, cy+Math.sin(a)*sz*0.44); ctx.stroke();
+      }
+      // Голова
+      ctx.fillStyle = '#66bb6a'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.52, sz*0.2, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Шея
+      ctx.fillStyle = '#66bb6a';
+      ctx.beginPath(); ctx.rect(cx-sz*0.1, cy-sz*0.52, sz*0.2, sz*0.16); ctx.fill();
+      // Глаза
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(cx-sz*0.09, cy-sz*0.58, sz*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.09, cy-sz*0.58, sz*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-sz*0.07, cy-sz*0.61, sz*0.02, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.07, cy-sz*0.61, sz*0.02, 0, Math.PI*2); ctx.fill();
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.52, cy+sz*0.04+Math.sin(a)*sz*0.46]);
+      for (const [ex,ey,ang] of [[0.5,-0.22,-0.5],[0.42,0.38,0.5]]) {
+        for (let a=0; a<Math.PI*2; a+=Math.PI/4) { const px=cx+ex*sz+Math.cos(a+ang)*sz*0.18, py=cy+ey*sz+Math.sin(a+ang)*sz*0.12; if(px>=cx) pts.push([px,py]); }
+      }
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/6) pts.push([cx+Math.cos(a)*sz*0.2, cy-sz*0.52+Math.sin(a)*sz*0.2]);
+      pts.push([cx+sz*0.09, cy-sz*0.58]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  hedgehog: {
+    label: 'Ёжик',
+    hint: '🦔 Дорисуй правую половину ёжика!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      // Иголки (симметричные веером)
+      ctx.strokeStyle = '#5d4037'; ctx.lineWidth = sz*0.04;
+      const spineBase = [[0,-0.82],[0.22,-0.76],[0.4,-0.62],[0.52,-0.44],[0.58,-0.22],[0.56,0.0],[0.5,0.2]];
+      for (const [sdx, sdy] of spineBase) {
+        const baseX = cx+sdx*sz, baseY = cy+sdy*sz;
+        const ang = Math.atan2(sdy, sdx+0.01);
+        ctx.beginPath(); ctx.moveTo(baseX, baseY); ctx.lineTo(baseX+Math.cos(ang)*sz*0.22, baseY+Math.sin(ang)*sz*0.22); ctx.stroke();
+        if (sdx > 0) { ctx.beginPath(); ctx.moveTo(cx-sdx*sz, baseY); ctx.lineTo(cx-sdx*sz-Math.cos(ang)*sz*0.22, baseY+Math.sin(ang)*sz*0.22); ctx.stroke(); }
+      }
+      // Тело (коричневый полукруг + голова)
+      ctx.fillStyle = '#8d6e63'; ctx.strokeStyle = '#222'; ctx.lineWidth = lw;
+      ctx.beginPath(); ctx.ellipse(cx+sz*0.06, cy+sz*0.08, sz*0.54, sz*0.5, 0.15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Живот (светлый)
+      ctx.fillStyle = '#d7ccc8';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.04, cy+sz*0.14, sz*0.26, sz*0.34, -0.1, 0, Math.PI*2); ctx.fill();
+      // Голова
+      ctx.fillStyle = '#8d6e63';
+      ctx.beginPath(); ctx.arc(cx-sz*0.32, cy-sz*0.28, sz*0.28, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Нос (чёрный)
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(cx-sz*0.54, cy-sz*0.26, sz*0.07, 0, Math.PI*2); ctx.fill();
+      // Глаз (один, на левой стороне)
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(cx-sz*0.38, cy-sz*0.38, sz*0.06, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-sz*0.35, cy-sz*0.41, sz*0.025, 0, Math.PI*2); ctx.fill();
+      // Ушко (одно, на голове слева)
+      ctx.fillStyle = '#8d6e63';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.22, cy-sz*0.54, sz*0.08, sz*0.14, -0.4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#ffcdd2';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.22, cy-sz*0.54, sz*0.04, sz*0.09, -0.4, 0, Math.PI*2); ctx.fill();
+      // Ножки
+      for (const ex of [-0.18, 0.18]) {
+        ctx.fillStyle = '#6d4c41';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.54, sz*0.12, sz*0.09, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      const spineBase = [[0.22,-0.76],[0.4,-0.62],[0.52,-0.44],[0.58,-0.22],[0.56,0.0],[0.5,0.2]];
+      for (const [sdx, sdy] of spineBase) {
+        const ang = Math.atan2(sdy, sdx);
+        pts.push([cx+sdx*sz+Math.cos(ang)*sz*0.22, cy+sdy*sz+Math.sin(ang)*sz*0.22]);
+        pts.push([cx+sdx*sz, cy+sdy*sz]);
+      }
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/8) pts.push([cx+sz*0.06+Math.cos(a)*sz*0.54, cy+sz*0.08+Math.sin(a+0.15)*sz*0.5]);
+      for (let a=-Math.PI; a<=0; a+=Math.PI/4) pts.push([cx+sz*0.18+Math.cos(a)*sz*0.12, cy+sz*0.54+Math.sin(a)*sz*0.09]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
+  penguin: {
+    label: 'Пингвин',
+    hint: '🐧 Дорисуй вторую половину пингвина!',
+    draw(ctx, cx, cy, sz) {
+      const lw = sz*0.05;
+      ctx.lineWidth = lw; ctx.strokeStyle = '#222'; ctx.lineJoin = 'round';
+      // Тело (чёрное, овальное)
+      ctx.fillStyle = '#212121';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.18, sz*0.44, sz*0.62, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Белый живот
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.24, sz*0.26, sz*0.46, 0, 0, Math.PI*2); ctx.fill();
+      // Голова (чёрная)
+      ctx.fillStyle = '#212121';
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.46, sz*0.32, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // Белые пятна вокруг глаз
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.ellipse(cx-sz*0.14, cy-sz*0.52, sz*0.13, sz*0.11, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+sz*0.14, cy-sz*0.52, sz*0.13, sz*0.11, 0, 0, Math.PI*2); ctx.fill();
+      // Глаза
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(cx-sz*0.14, cy-sz*0.54, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.14, cy-sz*0.54, sz*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-sz*0.11, cy-sz*0.58, sz*0.03, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+sz*0.11, cy-sz*0.58, sz*0.03, 0, Math.PI*2); ctx.fill();
+      // Клюв
+      ctx.fillStyle = '#ff8f00';
+      ctx.beginPath(); ctx.moveTo(cx, cy-sz*0.36); ctx.lineTo(cx-sz*0.1, cy-sz*0.28); ctx.lineTo(cx+sz*0.1, cy-sz*0.28); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // Крылья (симметричные, как лопатки)
+      for (const ex of [-0.44, 0.44]) {
+        ctx.fillStyle = '#212121';
+        ctx.beginPath(); ctx.ellipse(cx+ex*sz, cy+sz*0.18, sz*0.11, sz*0.36, ex>0?0.35:-0.35, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+      // Ножки и лапки
+      for (const ex of [-0.18, 0.18]) {
+        ctx.fillStyle = '#ff8f00';
+        ctx.beginPath(); ctx.rect(cx+ex*sz-sz*0.07, cy+sz*0.78, sz*0.14, sz*0.16); ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx+ex*sz-sz*0.18, cy+sz*0.94); ctx.lineTo(cx+ex*sz+sz*0.18, cy+sz*0.94);
+        ctx.lineTo(cx+ex*sz+sz*0.1, cy+sz*1.04); ctx.lineTo(cx+ex*sz-sz*0.1, cy+sz*1.04);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      }
+    },
+    keyPoints(cx, cy, sz) {
+      const pts = [];
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.44, cy+sz*0.18+Math.sin(a)*sz*0.62]);
+      for (let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*sz*0.32, cy-sz*0.46+Math.sin(a)*sz*0.32]);
+      for (let a=0; a<Math.PI*2; a+=Math.PI/4) { const px=cx+sz*0.44+Math.cos(a+0.35)*sz*0.11, py=cy+sz*0.18+Math.sin(a+0.35)*sz*0.36; if(px>=cx) pts.push([px,py]); }
+      pts.push([cx+sz*0.14, cy-sz*0.52],[cx+sz*0.27, cy-sz*0.52]);
+      pts.push([cx+sz*0.25, cy+sz*0.78],[cx+sz*0.25, cy+sz*0.94],[cx+sz*0.28, cy+sz*1.04]);
+      return pts.filter(([px]) => px >= cx);
+    }
+  },
+
   sprunki: {
     label: 'Спрунки',
     hint: '🎵 Дорисуй вторую половину Спрунки!',

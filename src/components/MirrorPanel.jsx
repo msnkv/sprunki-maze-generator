@@ -12,6 +12,16 @@ const SHAPES = [
   { key: 'patrick',   label: '⭐ Патрик' },
   { key: 'omnom',     label: '🟢 Ам Ням' },
   { key: 'booba',     label: '💙 Буба' },
+  { key: 'minion',   label: '💛 Миньон' },
+  { key: 'pikachu',  label: '⚡ Пикачу' },
+  { key: 'alien',    label: '👽 Пришелец' },
+  { key: 'robot',    label: '🤖 Робот' },
+  { key: 'snowman',  label: '⛄ Снеговик' },
+  { key: 'sun',      label: '☀️ Солнышко' },
+  { key: 'octopus',  label: '🐙 Осьминог' },
+  { key: 'turtle',   label: '🐢 Черепаха' },
+  { key: 'hedgehog', label: '🦔 Ёжик' },
+  { key: 'penguin',  label: '🐧 Пингвин' },
 ];
 
 export default function MirrorPanel({ config, setConfig, children }) {
