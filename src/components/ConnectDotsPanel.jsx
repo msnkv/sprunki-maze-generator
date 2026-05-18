@@ -24,13 +24,26 @@ const ALL_SHAPES = [
   { key: 'snowman',      label: '⛄ Снеговик' },
   { key: 'sun',          label: '☀️ Солнышко' },
   { key: 'robot',        label: '🤖 Робот' },
-  { key: 'sprunkiOrange',label: '🎵 Орен' },
-  { key: 'sprunkiRed',   label: '🎵 Рэдди' },
-  { key: 'sprunkiSilver',label: '🎵 Кликр' },
-  { key: 'sprunkiGreen', label: '🎵 Винерия' },
-  { key: 'sprunkiPurple',label: '🎵 Дурпл' },
-  { key: 'sprunkiPinki', label: '🎵 Пинки' },
-  { key: 'sprunkiBlack', label: '🎵 Блэк' },
+  { key: 'sprunkiOrange',    label: '🎵 Орен' },
+  { key: 'sprunkiRed',       label: '🎵 Рэдди' },
+  { key: 'sprunkiSilver',    label: '🎵 Кликр' },
+  { key: 'sprunkiFunBot',    label: '🎵 ФанБот' },
+  { key: 'sprunkiGreen',     label: '🎵 Винерия' },
+  { key: 'sprunkiGray',      label: '🎵 Грэй' },
+  { key: 'sprunkiBrown',     label: '🎵 Бруд' },
+  { key: 'sprunkiGold',      label: '🎵 Гарнольд' },
+  { key: 'sprunkiLime',      label: '🎵 Облакс' },
+  { key: 'sprunkiSky',       label: '🎵 Скай' },
+  { key: 'sprunkiMrSun',     label: '🎵 МрСан' },
+  { key: 'sprunkiPurple',    label: '🎵 Дурпл' },
+  { key: 'sprunkiMrTree',    label: '🎵 МрДерево' },
+  { key: 'sprunkiYellow',    label: '🎵 Саймон' },
+  { key: 'sprunkiTan',       label: '🎵 Танер' },
+  { key: 'sprunkiMrFunComp', label: '🎵 МрКомп' },
+  { key: 'sprunkiWenda',     label: '🎵 Венда' },
+  { key: 'sprunkiPinki',     label: '🎵 Пинки' },
+  { key: 'sprunkiJevin',     label: '🎵 Джевин' },
+  { key: 'sprunkiBlack',     label: '🎵 Блэк' },
 ];
 
 const SPP_OPTIONS = [
@@ -89,8 +102,12 @@ export default function ConnectDotsPanel({ config, setConfig, children }) {
             );
           })}
         </div>
-        <button onClick={() => setConfig({ selectedShapes: ALL_SHAPES.map(s => s.key) })}
-          style={smallBtn}>Выбрать все</button>
+        <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <button onClick={() => setConfig({ selectedShapes: ALL_SHAPES.map(s => s.key) })}
+            style={smallBtn}>Выбрать все</button>
+          <button onClick={() => setConfig({ selectedShapes: [] })}
+            style={smallBtn}>Снять все</button>
+        </div>
       </Section>
 
       <Section title="3. Страница">

@@ -780,6 +780,190 @@ const CD_SHAPES = {
       ctx.beginPath(); ctx.arc(cx+sz*0.09, cy-sz*0.165, sz*0.024, 0, Math.PI*2); ctx.fill();
     }
   },
+  sprunkiFunBot: {
+    label: 'ФанБот (Спрунки)', svgKey: 'FunbotNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx, hy-hr-sz*0.3]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#777'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiGray: {
+    label: 'Грэй (Спрунки)', svgKey: 'GrayNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#888'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiBrown: {
+    label: 'Бруд (Спрунки)', svgKey: 'BrudNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#7b4a1e'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiGold: {
+    label: 'Гарнольд (Спрунки)', svgKey: 'GarnoldNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#c8960a'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiLime: {
+    label: 'Облакс (Спрунки)', svgKey: 'OwakcxNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#88dd00'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiSky: {
+    label: 'Скай (Спрунки)', svgKey: 'SkyNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#44ccff'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiMrTree: {
+    label: 'МрДерево (Спрунки)', svgKey: 'MrTreeNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*(hr+sz*0.15), hy-sz*0.15+Math.sin(a)*(hr+sz*0.15)]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#1a5c1a'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiYellow: {
+    label: 'Саймон (Спрунки)', svgKey: 'SimonNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx+hr*1.24+hr*0.42, hy]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#ffdd00'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiTan: {
+    label: 'Танер (Спрунки)', svgKey: 'TunnerNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#c8a06a'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiWenda: {
+    label: 'Венда (Спрунки)', svgKey: 'WendaNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#f0f0f0'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiJevin: {
+    label: 'Джевин (Спрунки)', svgKey: 'JevinNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.33, bh=sz*0.33, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#1144cc'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.33,cy+sz*0.24-sz*0.33,sz*0.66,sz*0.66,sz*0.15); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiMrSun: {
+    label: 'МрСан (Спрунки)', svgKey: 'MrSunNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/6) pts.push([cx+Math.cos(a)*(hr+sz*0.12), hy+Math.sin(a)*(hr+sz*0.12)]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#ffcc00'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
+  sprunkiMrFunComp: {
+    label: 'МрКомп (Спрунки)', svgKey: 'MrFunComputerNormal',
+    dotPath(cx, cy, sz) {
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
+      return pts;
+    },
+    draw(ctx, cx, cy, sz) {
+      ctx.fillStyle='#4488cc'; ctx.strokeStyle='#333'; ctx.lineWidth=sz*0.03;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21,cy+sz*0.24-sz*0.36,sz*0.42,sz*0.72,sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy-sz*0.12,sz*0.27,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  },
   sprunkiBlack: {
     label: 'Блэк (Спрунки)', svgKey: 'BlackNormal',
     dotPath(cx, cy, sz) {

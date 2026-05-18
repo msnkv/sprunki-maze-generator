@@ -42,8 +42,10 @@ const SHAPES = [
   { key: 'sprunkiTan',    label: '🎵 Танер' },
   { key: 'sprunkiWenda',  label: '🎵 Венда' },
   { key: 'sprunkiPinki',  label: '🎵 Пинки' },
-  { key: 'sprunkiJevin',  label: '🎵 Джевин' },
-  { key: 'sprunkiBlack',  label: '🎵 Блэк' },
+  { key: 'sprunkiJevin',      label: '🎵 Джевин' },
+  { key: 'sprunkiBlack',      label: '🎵 Блэк' },
+  { key: 'sprunkiMrSun',      label: '🎵 МрСан' },
+  { key: 'sprunkiMrFunComp',  label: '🎵 МрКомп' },
 ];
 
 export default function MirrorPanel({ config, setConfig, children }) {

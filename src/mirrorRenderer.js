@@ -1583,6 +1583,16 @@ const SHAPE_DEFS_SPRUNKI = {
     draw(ctx,cx,cy,sz){ drawSprunki(ctx,cx,cy,sz,{color:'#111111',headColor:'#222222',bodyDecor:'shirt',headTop:{type:'tophat',color:'#111111'}}); },
     keyPoints(cx,cy,sz){ return sprunkiKP(cx,cy,sz); }
   },
+  sprunkiMrSun: {
+    label: 'МрСан (Спрунки)', hint: '🎵 Дорисуй лучи МрСана!',
+    draw(ctx,cx,cy,sz){ drawSprunki(ctx,cx,cy,sz,{color:'#ffcc00',headTop:{type:'sunrays',color:'#ffaa00'}}); },
+    keyPoints(cx,cy,sz){ return sprunkiKP(cx,cy,sz); }
+  },
+  sprunkiMrFunComp: {
+    label: 'МрКомп (Спрунки)', hint: '🎵 Дорисуй правую сторону МрКомпа!',
+    draw(ctx,cx,cy,sz){ drawSprunki(ctx,cx,cy,sz,{color:'#4488cc',faceMask:'robotscreen',headTop:{type:'antenna',color:'#88ccff'}}); },
+    keyPoints(cx,cy,sz){ return sprunkiKP(cx,cy,sz); }
+  },
 
   dog: {
     label: 'Собачка', hint: '🐶 Дорисуй правое ушко собачки!',
@@ -1797,6 +1807,7 @@ const SPRUNKI_SVG_KEYS = {
   sprunkiSky:'SkyNormal', sprunkiPurple:'DurpleNormal', sprunkiMrTree:'MrTreeNormal',
   sprunkiYellow:'SimonNormal', sprunkiTan:'TunnerNormal', sprunkiWenda:'WendaNormal',
   sprunkiPinki:'PinkiNormal', sprunkiJevin:'JevinNormal', sprunkiBlack:'BlackNormal',
+  sprunkiMrSun:'MrSunNormal', sprunkiMrFunComp:'MrFunComputerNormal',
 };
 
 function renderMirrorExercise(ctx, x, y, w, h, config) {
