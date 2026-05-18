@@ -1,15 +1,41 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { renderMirrorPage } from '../mirrorRenderer.js';
+
+const SPRUNKI_CHARS = [
+  'OrenNormal','RaddyNormal','ClukrNormal','FunbotNormal',
+  'VineriaNormal','GrayNormal','BrudNormal','GarnoldNormal',
+  'OwakcxNormal','SkyNormal','MrSunNormal','DurpleNormal',
+  'MrTreeNormal','SimonNormal','TunnerNormal','MrFunComputerNormal',
+  'WendaNormal','PinkiNormal','JevinNormal','BlackNormal',
+];
+
+function loadSprunkiImages() {
+  const imgs = {};
+  let pending = SPRUNKI_CHARS.length;
+  return new Promise(res => {
+    SPRUNKI_CHARS.forEach(name => {
+      const img = new Image();
+      img.onload = () => { imgs[name] = img; if (--pending === 0) res(imgs); };
+      img.onerror = () => { if (--pending === 0) res(imgs); };
+      img.src = `/sprunki/${name}.svg`;
+    });
+  });
+}
 
 export default function MirrorPreview({ config }) {
   const canvasRef = useRef(null);
+  const [sprunkiImages, setSprunkiImages] = useState({});
+
+  useEffect(() => {
+    loadSprunkiImages().then(setSprunkiImages);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    document.fonts.ready.then(() => renderMirrorPage(ctx, config, 0));
-  }, [config]);
+    document.fonts.ready.then(() => renderMirrorPage(ctx, { ...config, sprunkiImages }, 0));
+  }, [config, sprunkiImages]);
 
   return (
     <canvas

@@ -1790,8 +1790,17 @@ Object.assign(SHAPE_DEFS, SHAPE_DEFS_SPRUNKI);
 // ==========================================================
 // EXERCISE RENDERER
 // ==========================================================
+const SPRUNKI_SVG_KEYS = {
+  sprunkiOrange:'OrenNormal', sprunkiRed:'RaddyNormal', sprunkiSilver:'ClukrNormal',
+  sprunkiFunBot:'FunbotNormal', sprunkiGreen:'VineriaNormal', sprunkiGray:'GrayNormal',
+  sprunkiBrown:'BrudNormal', sprunkiGold:'GarnoldNormal', sprunkiLime:'OwakcxNormal',
+  sprunkiSky:'SkyNormal', sprunkiPurple:'DurpleNormal', sprunkiMrTree:'MrTreeNormal',
+  sprunkiYellow:'SimonNormal', sprunkiTan:'TunnerNormal', sprunkiWenda:'WendaNormal',
+  sprunkiPinki:'PinkiNormal', sprunkiJevin:'JevinNormal', sprunkiBlack:'BlackNormal',
+};
+
 function renderMirrorExercise(ctx, x, y, w, h, config) {
-  const { shape = 'bunny', guideDots = 10, showHint = true, showGrid = true, accentColor = '#9c27b0' } = config;
+  const { shape = 'bunny', guideDots = 10, showHint = true, showGrid = true, accentColor = '#9c27b0', sprunkiImages = {} } = config;
   const shapeDef = SHAPE_DEFS[shape] || SHAPE_DEFS.bunny;
   const cx = x + w / 2;
   const hintH = showHint ? Math.min(h * 0.1, 50) : 0;
@@ -1810,48 +1819,83 @@ function renderMirrorExercise(ctx, x, y, w, h, config) {
       }
   }
 
-  // Left half: full colored shape
-  ctx.save();
-  ctx.beginPath(); ctx.rect(x, y, w / 2, h); ctx.clip();
-  shapeDef.draw(ctx, cx, cy, sz);
-  ctx.restore();
+  const svgName = SPRUNKI_SVG_KEYS[shape];
+  const svgImg  = svgName ? sprunkiImages[svgName] : null;
+  const hasSvg  = svgImg && svgImg.complete && svgImg.naturalWidth > 0;
 
-  // Center divider
-  ctx.save();
-  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
-  ctx.setLineDash([8, 6]);
-  ctx.beginPath(); ctx.moveTo(cx, y + 6); ctx.lineTo(cx, y + drawH - 6); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.restore();
+  if (hasSvg) {
+    const svgAR = svgImg.naturalWidth / svgImg.naturalHeight;
+    let imgH = drawH * 0.82;
+    let imgW = imgH * svgAR;
+    if (imgW > w * 0.9) { imgW = w * 0.9; imgH = imgW / svgAR; }
+    const imgX = cx - imgW / 2;
+    const imgY = cy - imgH / 2;
 
-  // Right half: dashed outline guide via Proxy
-  // guideDots 3-20: thin→thick dash, easy to control difficulty
-  const t = (guideDots - 3) / 17; // 0..1
-  const guideLineWidth = 1.2 + t * 5.8;   // 1.2 → 7 px
-  const dashLen        = 5  + t * 18;      // 5  → 23 px
-  const gapLen         = 22 - t * 15;      // 22 → 7  px
-  const guideColor     = accentColor + 'bb'; // accent semi-transparent
+    // Left half: full image
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x, y, w / 2, h); ctx.clip();
+    ctx.drawImage(svgImg, imgX, imgY, imgW, imgH);
+    ctx.restore();
 
-  ctx.save();
-  ctx.beginPath(); ctx.rect(cx, y, w / 2, h); ctx.clip();
-  ctx.setLineDash([dashLen, gapLen]);
+    // Center divider
+    ctx.save();
+    ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath(); ctx.moveTo(cx, y + 6); ctx.lineTo(cx, y + drawH - 6); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
 
-  const proxyCtx = new Proxy(ctx, {
-    set(target, prop, value) {
-      if (prop === 'fillStyle')   return true;            // suppress fills
-      if (prop === 'strokeStyle') { target[prop] = guideColor;     return true; }
-      if (prop === 'lineWidth')   { target[prop] = guideLineWidth; return true; }
-      target[prop] = value; return true;
-    },
-    get(target, prop) {
-      if (prop === 'fill' || prop === 'fillRect' || prop === 'fillText') return () => {};
-      const val = target[prop];
-      return typeof val === 'function' ? val.bind(target) : val;
-    },
-  });
+    // Right half: ghost guide, opacity = difficulty
+    const t = (guideDots - 3) / 17;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(cx, y, w / 2, h); ctx.clip();
+    ctx.globalAlpha = 0.07 + t * 0.38;
+    ctx.drawImage(svgImg, imgX, imgY, imgW, imgH);
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  } else {
+    // Left half: full colored shape
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x, y, w / 2, h); ctx.clip();
+    shapeDef.draw(ctx, cx, cy, sz);
+    ctx.restore();
 
-  shapeDef.draw(proxyCtx, cx, cy, sz);
-  ctx.restore(); // clears clip + dash pattern
+    // Center divider
+    ctx.save();
+    ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath(); ctx.moveTo(cx, y + 6); ctx.lineTo(cx, y + drawH - 6); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Right half: dashed outline guide via Proxy
+    const t = (guideDots - 3) / 17;
+    const guideLineWidth = 1.2 + t * 5.8;
+    const dashLen = 5 + t * 18;
+    const gapLen = 22 - t * 15;
+    const guideColor = accentColor + 'bb';
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(cx, y, w / 2, h); ctx.clip();
+    ctx.setLineDash([dashLen, gapLen]);
+
+    const proxyCtx = new Proxy(ctx, {
+      set(target, prop, value) {
+        if (prop === 'fillStyle')   return true;
+        if (prop === 'strokeStyle') { target[prop] = guideColor;     return true; }
+        if (prop === 'lineWidth')   { target[prop] = guideLineWidth; return true; }
+        target[prop] = value; return true;
+      },
+      get(target, prop) {
+        if (prop === 'fill' || prop === 'fillRect' || prop === 'fillText') return () => {};
+        const val = target[prop];
+        return typeof val === 'function' ? val.bind(target) : val;
+      },
+    });
+
+    shapeDef.draw(proxyCtx, cx, cy, sz);
+    ctx.restore();
+  }
 
   if (showHint && shapeDef.hint) {
     ctx.save();
@@ -1871,6 +1915,7 @@ export function renderMirrorPage(ctx, config, pageIndex) {
   const {
     shape = 'bunny', guideDots = 10, showHint = true, showGrid = true,
     pageTitle = 'Зеркальный художник', accentColor = '#9c27b0', pages = 1,
+    sprunkiImages = {},
   } = config;
 
   const W = ctx.canvas.width, H = ctx.canvas.height;
@@ -1892,7 +1937,7 @@ export function renderMirrorPage(ctx, config, pageIndex) {
 
   const footerH = 5*mm;
   renderMirrorExercise(ctx, padSide, curY, W - 2*padSide, H - curY - padBot - footerH, {
-    shape, guideDots, showHint, showGrid, accentColor
+    shape, guideDots, showHint, showGrid, accentColor, sprunkiImages
   });
 
   ctx.fillStyle = '#bbb';

@@ -644,7 +644,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiOrange: {
-    label: 'Орен (Спрунки)',
+    label: 'Орен (Спрунки)', svgKey: 'OrenNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       pts.push([cx+hr+sz*0.04, hy]);
@@ -669,7 +669,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiRed: {
-    label: 'Рэдди (Спрунки)',
+    label: 'Рэдди (Спрунки)', svgKey: 'RaddyNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       const n=4;
@@ -696,7 +696,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiSilver: {
-    label: 'Кликр (Спрунки)',
+    label: 'Кликр (Спрунки)', svgKey: 'ClukrNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.14, bh=sz*0.36, by=cy+sz*0.24;
       for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
@@ -713,7 +713,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiGreen: {
-    label: 'Винерия (Спрунки)',
+    label: 'Винерия (Спрунки)', svgKey: 'VineriaNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
@@ -738,7 +738,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiPurple: {
-    label: 'Дурпл (Спрунки)',
+    label: 'Дурпл (Спрунки)', svgKey: 'DurpleNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       pts.push([cx+hr*0.8, hy-hr*1.38], [cx+hr*0.42, hy-hr*0.68]);
@@ -759,7 +759,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiPinki: {
-    label: 'Пинки (Спрунки)',
+    label: 'Пинки (Спрунки)', svgKey: 'PinkiNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       pts.push([cx+hr*0.28, hy-hr*2.0], [cx+hr*0.28, hy-hr*1.1], [cx-hr*0.28, hy-hr*1.1], [cx-hr*0.28, hy-hr*2.0]);
@@ -781,7 +781,7 @@ const CD_SHAPES = {
     }
   },
   sprunkiBlack: {
-    label: 'Блэк (Спрунки)',
+    label: 'Блэк (Спрунки)', svgKey: 'BlackNormal',
     dotPath(cx, cy, sz) {
       const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       pts.push([cx-hr*0.64, hy-hr], [cx-hr*0.64, hy-hr-sz*0.28], [cx+hr*0.64, hy-hr-sz*0.28], [cx+hr*0.64, hy-hr]);
@@ -898,7 +898,21 @@ function renderDotCell(ctx, cell, shapeDef, config, showFaintOutline, canvasScal
   const pts = [];
   for (let i = 0; i < n; i++) pts.push(rawPts[Math.min(Math.round(i * step), rawPts.length - 1)]);
 
-  if (showFaintOutline) drawFaintOutline(ctx, pts);
+  if (showFaintOutline) {
+    const svgImg = shapeDef.svgKey ? (config.sprunkiImages || {})[shapeDef.svgKey] : null;
+    if (svgImg && svgImg.complete && svgImg.naturalWidth > 0) {
+      const ar = svgImg.naturalWidth / svgImg.naturalHeight;
+      let ih = drawH * 0.72; let iw = ih * ar;
+      if (iw > w * 0.85) { iw = w * 0.85; ih = iw / ar; }
+      ctx.save();
+      ctx.globalAlpha = 0.13;
+      ctx.drawImage(svgImg, cx - iw / 2, cy - ih / 2, iw, ih);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    } else {
+      drawFaintOutline(ctx, pts);
+    }
+  }
   drawNumberedDots(ctx, pts, n, config.accentColor || '#e91e63', canvasScale);
 
   // Label
