@@ -646,19 +646,18 @@ const CD_SHAPES = {
   sprunkiOrange: {
     label: 'Орен (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
-      pts.push([cx + hr + sz*0.1, hy]);
-      for (let a = -Math.PI/3; a <= Math.PI/3; a += Math.PI/4) pts.push([cx + Math.cos(a)*(hr + sz*0.1) - sz*0.01, hy + Math.sin(a)*(hr + sz*0.1)]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx+hr+sz*0.04, hy]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      pts.push([cx-hr-sz*0.04, hy]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       const { drawSprunki: _ } = { drawSprunki: null };
       ctx.fillStyle = '#ff7700'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       ctx.strokeStyle = '#ff5500'; ctx.lineWidth = sz*0.04;
       ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24 + sz*0.04, Math.PI*1.08, Math.PI*1.92); ctx.stroke();
       ctx.fillStyle = '#ff5500'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.025;
@@ -672,22 +671,18 @@ const CD_SHAPES = {
   sprunkiRed: {
     label: 'Рэдди (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
       const n=4;
-      for (let i=0; i<n; i++) {
-        const a = -Math.PI/2 + (i-(n-1)/2)*(Math.PI*0.65/Math.max(n-1,1));
-        if(Math.cos(a)>=0) pts.push([cx+Math.cos(a)*(hr+sz*0.21), hy+Math.sin(a)*(hr+sz*0.21)]);
-      }
+      for (let i=0;i<n;i++){const a=-Math.PI/2+(i-(n-1)/2)*(Math.PI*0.65/Math.max(n-1,1));pts.push([cx+Math.cos(a)*(hr+sz*0.21),hy+Math.sin(a)*(hr+sz*0.21)]);}
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#cc1111'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      const hr=sz*0.24, hy=cy-sz*0.14, n=4;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      const hr=sz*0.27, hy=cy-sz*0.12, n=4;
       for (let i=0; i<n; i++) {
         const a=-Math.PI/2+(i-(n-1)/2)*(Math.PI*0.65/Math.max(n-1,1));
         const bx2=cx+Math.cos(a)*hr*0.88, by2=hy+Math.sin(a)*hr*0.88;
@@ -703,16 +698,15 @@ const CD_SHAPES = {
   sprunkiSilver: {
     label: 'Кликр (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.18, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.14, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#aaaaaa'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.18, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.14, cy+sz*0.24-sz*0.36, sz*0.28, sz*0.72, sz*0.1); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#111'; ctx.lineWidth = 0;
       ctx.beginPath(); ctx.arc(cx-sz*0.09, cy-sz*0.165, sz*0.024, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(cx+sz*0.09, cy-sz*0.165, sz*0.024, 0, Math.PI*2); ctx.fill();
@@ -721,17 +715,16 @@ const CD_SHAPES = {
   sprunkiGreen: {
     label: 'Винерия (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#228b22'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      const hr=sz*0.24, hy=cy-sz*0.14, n=4;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      const hr=sz*0.27, hy=cy-sz*0.12, n=4;
       for (let i=0; i<n; i++) {
         const ang=-Math.PI/2+(i-(n-1)/2)*(Math.PI*0.55/Math.max(n-1,1));
         const fx=cx+Math.cos(ang)*hr*0.65, fy=hy+Math.sin(ang)*hr*0.65-hr*0.88;
@@ -747,18 +740,18 @@ const CD_SHAPES = {
   sprunkiPurple: {
     label: 'Дурпл (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
-      pts.push([cx+hr*0.75, hy-hr*1.38]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx+hr*0.8, hy-hr*1.38], [cx+hr*0.42, hy-hr*0.68]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      pts.push([cx-hr*0.42, hy-hr*0.68], [cx-hr*0.8, hy-hr*1.38]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#8822cc'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      const hr=sz*0.24, hy=cy-sz*0.14;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      const hr=sz*0.27, hy=cy-sz*0.12;
       ctx.beginPath(); ctx.moveTo(cx+hr*0.42, hy-hr*0.68); ctx.lineTo(cx+hr*0.8, hy-hr*1.38); ctx.lineTo(cx+hr*0.1, hy-hr*0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#2a2a00'; ctx.lineWidth = 0;
       ctx.beginPath(); ctx.ellipse(cx-hr*0.32, hy-hr*0.05, hr*0.08, hr*0.18, 0, 0, Math.PI*2); ctx.fill();
@@ -768,18 +761,17 @@ const CD_SHAPES = {
   sprunkiPinki: {
     label: 'Пинки (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
-      pts.push([cx+hr*0.28+hr*0.14, hy-hr*1.55]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx+hr*0.28, hy-hr*2.0], [cx+hr*0.28, hy-hr*1.1], [cx-hr*0.28, hy-hr*1.1], [cx-hr*0.28, hy-hr*2.0]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#ff88bb'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      const hr=sz*0.24, hy=cy-sz*0.14;
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      const hr=sz*0.27, hy=cy-sz*0.12;
       ctx.fillStyle='#ffaad4';
       ctx.beginPath(); ctx.ellipse(cx-hr*0.28, hy-hr*1.55, hr*0.14, hr*0.46, -0.1, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       ctx.beginPath(); ctx.ellipse(cx+hr*0.28, hy-hr*1.55, hr*0.14, hr*0.46, 0.1, 0, Math.PI*2); ctx.fill(); ctx.stroke();
@@ -791,23 +783,21 @@ const CD_SHAPES = {
   sprunkiBlack: {
     label: 'Блэк (Спрунки)',
     dotPath(cx, cy, sz) {
-      const pts = [];
-      const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, by=cy+sz*0.16;
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*hr, hy + Math.sin(a)*hr]);
-      for (let a = -Math.PI/2; a <= Math.PI/2; a += Math.PI/8) pts.push([cx + Math.cos(a)*bw, by + Math.sin(a)*sz*0.32]);
-      // top hat outline
-      pts.push([cx+hr*0.64, hy-hr], [cx+hr*0.64, hy-hr-sz*0.28], [cx-hr*0.64, hy-hr-sz*0.28], [cx-hr*0.64, hy-hr]);
+      const pts = [], hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
+      pts.push([cx-hr*0.64, hy-hr], [cx-hr*0.64, hy-hr-sz*0.28], [cx+hr*0.64, hy-hr-sz*0.28], [cx+hr*0.64, hy-hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
+      for (let a=-Math.PI/2; a<Math.PI*1.5; a+=Math.PI/7) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
       return pts;
     },
     draw(ctx, cx, cy, sz) {
       ctx.fillStyle = '#111111'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27, sz*0.32, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(cx-sz*0.21, cy+sz*0.24-sz*0.36, sz*0.42, sz*0.72, sz*0.12); ctx.fill(); ctx.stroke();
       // white shirt
       ctx.fillStyle = '#fff'; ctx.strokeStyle = '#ccc'; ctx.lineWidth = sz*0.015;
       ctx.beginPath(); ctx.ellipse(cx, cy+sz*0.16, sz*0.27*0.5, sz*0.32*0.55, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#222222'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = sz*0.03;
-      ctx.beginPath(); ctx.arc(cx, cy-sz*0.14, sz*0.24, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      const hr=sz*0.24, hy=cy-sz*0.14;
+      ctx.beginPath(); ctx.arc(cx, cy-sz*0.12, sz*0.27, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      const hr=sz*0.27, hy=cy-sz*0.12;
       ctx.fillStyle='#111111';
       ctx.beginPath(); ctx.ellipse(cx, hy-hr, hr*1.18, hr*0.2, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       ctx.fillRect(cx-hr*0.64, hy-hr-sz*0.28, hr*1.28, sz*0.28);

@@ -1256,16 +1256,21 @@ function drawSprunki(ctx, cx, cy, sz, opts) {
   ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
   ctx.strokeStyle = '#1a1a1a';
 
-  // Body
-  const bw = bodyShape === 'narrow' ? sz * 0.18 : bodyShape === 'round' ? sz * 0.32 : sz * 0.27;
-  const bh = bodyShape === 'round' ? sz * 0.32 : sz * 0.32;
-  const by = cy + sz * 0.16;
+  // Body — narrow rounded-rect like paint-stroke (matches Sprunki reference style)
+  const bw = bodyShape === 'narrow' ? sz * 0.14 : bodyShape === 'round' ? sz * 0.33 : sz * 0.21;
+  const bh = bodyShape === 'round' ? sz * 0.33 : sz * 0.36;
+  const by = cy + sz * 0.24;
   ctx.fillStyle = color;
-  ctx.beginPath(); ctx.ellipse(cx, by, bw, bh, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  if (bodyShape === 'round') {
+    ctx.beginPath(); ctx.ellipse(cx, by, bw, bh, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  } else {
+    const rad = bw * 0.55;
+    ctx.beginPath(); ctx.roundRect(cx - bw, by - bh, bw*2, bh*2, rad); ctx.fill(); ctx.stroke();
+  }
 
-  // Head
-  const hr = sz * 0.24;
-  const hy = cy - sz * 0.14;
+  // Head — larger, sits right on top of body
+  const hr = sz * 0.27;
+  const hy = cy - sz * 0.12;
   ctx.fillStyle = hc;
   ctx.beginPath(); ctx.arc(cx, hy, hr, 0, Math.PI*2); ctx.fill(); ctx.stroke();
 
@@ -1477,7 +1482,7 @@ function drawSprunki(ctx, cx, cy, sz, opts) {
 }
 
 function sprunkiKP(cx, cy, sz, extra) {
-  const hr=sz*0.24, hy=cy-sz*0.14, bw=sz*0.27, bh=sz*0.32, by=cy+sz*0.16;
+  const hr=sz*0.27, hy=cy-sz*0.12, bw=sz*0.21, bh=sz*0.36, by=cy+sz*0.24;
   const pts=[];
   for(let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*hr, hy+Math.sin(a)*hr]);
   for(let a=-Math.PI/2; a<=Math.PI/2; a+=Math.PI/10) pts.push([cx+Math.cos(a)*bw, by+Math.sin(a)*bh]);
