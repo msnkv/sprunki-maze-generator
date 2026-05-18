@@ -1165,6 +1165,34 @@ function levelStars(cols, rows) {
 }
 
 // ==========================================================
+// SPRUNKI IMAGE HELPERS
+// ==========================================================
+const SPRUNKI_CHARS = [
+  'OrenNormal','RaddyNormal','ClukrNormal','FunbotNormal',
+  'VineriaNormal','GrayNormal','BrudNormal','GarnoldNormal',
+  'OwakcxNormal','SkyNormal','MrSunNormal','DurpleNormal',
+  'MrTreeNormal','SimonNormal','TunnerNormal','MrFunComputerNormal',
+  'WendaNormal','PinkiNormal','JevinNormal','BlackNormal',
+];
+
+function selectSprunkiPair(seed) {
+  const a = (seed * 17 + 3) % SPRUNKI_CHARS.length;
+  let b = (seed * 31 + 11) % SPRUNKI_CHARS.length;
+  if (b === a) b = (b + 1) % SPRUNKI_CHARS.length;
+  return [SPRUNKI_CHARS[a], SPRUNKI_CHARS[b]];
+}
+
+function drawSprunkiImg(ctx, img, areaX, areaY, areaW, areaH) {
+  if (!img || !img.complete || img.naturalWidth === 0) return;
+  const ar = img.naturalWidth / img.naturalHeight;
+  let dw = areaW, dh = dw / ar;
+  if (dh > areaH * 0.85) { dh = areaH * 0.85; dw = dh * ar; }
+  const dx = areaX + (areaW - dw) / 2;
+  const dy = areaY + (areaH - dh) / 2;
+  ctx.drawImage(img, dx, dy, dw, dh);
+}
+
+// ==========================================================
 // PAGE RENDERER (exported)
 // ==========================================================
 export function renderPage(ctx, config, pageIndex) {
@@ -1178,7 +1206,7 @@ export function renderPage(ctx, config, pageIndex) {
     traps = 0,
     carStyle = 'random', showFinishCat = true, showKetchup = true,
     mazePerPage = 2, pageTitle = 'Лабиринты', levelStartNumber = 1,
-    pages = 1,
+    pages = 1, sprunkiImages = {},
   } = config;
 
   const W = ctx.canvas.width;
@@ -1234,6 +1262,10 @@ export function renderPage(ctx, config, pageIndex) {
   const totalMazeH = H - padBot - footerH - curY - labelH * mazePerPage - midDivH * (mazePerPage - 1);
   const eachMazeH  = totalMazeH / mazePerPage;
 
+  const sprunkiSideW = 28 * mm;
+  const mazeX = padSide + sprunkiSideW;
+  const mazeW = cntW - 2 * sprunkiSideW;
+
   for (let i = 0; i < mazePerPage; i++) {
     const globalIdx = pageIndex * mazePerPage + i;
     const mazeSeed  = (baseSeed || 1) + globalIdx;
@@ -1249,12 +1281,16 @@ export function renderPage(ctx, config, pageIndex) {
     ctx.fillText(`${stars} Уровень ${levelNum}`, W/2, curY);
     curY += labelH;
 
-    renderMazeOnBounds(ctx, padSide, curY, cntW, eachMazeH, {
+    renderMazeOnBounds(ctx, mazeX, curY, mazeW, eachMazeH, {
       cols, rows, seed: mazeSeed, wallColor, accentColor, wallThickness,
       algo, exitPos, bombs, cannons, fire, beds, tissues,
       animals, animalTypes, vehicles, vehicleTypes, fruits, fruitTypes, traps,
       carStyle, showFinishCat, showKetchup,
     });
+
+    const [leftChar, rightChar] = selectSprunkiPair(mazeSeed);
+    drawSprunkiImg(ctx, sprunkiImages[leftChar],  padSide,                      curY, sprunkiSideW - 2*mm, eachMazeH);
+    drawSprunkiImg(ctx, sprunkiImages[rightChar], W - padSide - sprunkiSideW + 2*mm, curY, sprunkiSideW - 2*mm, eachMazeH);
 
     curY += eachMazeH;
 

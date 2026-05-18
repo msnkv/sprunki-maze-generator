@@ -6,7 +6,41 @@ import rendererSrc from '../mazeRenderer.js?raw';
 const A4_W_MM = 210, A4_H_MM = 297;
 const MM_TO_PX_96DPI = 3.7795;
 
-function buildPrintHTML(config) {
+const SPRUNKI_CHARS = [
+  'OrenNormal','RaddyNormal','ClukrNormal','FunbotNormal',
+  'VineriaNormal','GrayNormal','BrudNormal','GarnoldNormal',
+  'OwakcxNormal','SkyNormal','MrSunNormal','DurpleNormal',
+  'MrTreeNormal','SimonNormal','TunnerNormal','MrFunComputerNormal',
+  'WendaNormal','PinkiNormal','JevinNormal','BlackNormal',
+];
+
+async function fetchSprunkiDataURIs() {
+  const data = {};
+  await Promise.all(SPRUNKI_CHARS.map(async name => {
+    try {
+      const resp = await fetch(`/sprunki/${name}.svg`);
+      const text = await resp.text();
+      data[name] = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(text)));
+    } catch (e) {}
+  }));
+  return data;
+}
+
+async function loadSprunkiImages() {
+  const imgs = {};
+  await Promise.all(SPRUNKI_CHARS.map(name => new Promise(res => {
+    const img = new Image();
+    img.onload = () => { imgs[name] = img; res(); };
+    img.onerror = res;
+    img.src = `/sprunki/${name}.svg`;
+  })));
+  return imgs;
+}
+
+async function buildPrintHTML(config) {
+  const sprunkiData = await fetchSprunkiDataURIs();
+  const sprunkiDataJson = JSON.stringify(sprunkiData);
+
   return `<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -27,7 +61,25 @@ function buildPrintHTML(config) {
 <body>
 <script type="module">
 ${rendererSrc}
-document.fonts.ready.then(() => renderAllPages(${JSON.stringify(config)}));
+const SPRUNKI_DATA = ${sprunkiDataJson};
+function loadSprunki() {
+  const imgs = {};
+  const entries = Object.entries(SPRUNKI_DATA);
+  if (!entries.length) return Promise.resolve(imgs);
+  let pending = entries.length;
+  return new Promise(res => {
+    entries.forEach(([name, src]) => {
+      const img = new Image();
+      img.onload = () => { imgs[name] = img; if (--pending === 0) res(imgs); };
+      img.onerror = () => { if (--pending === 0) res(imgs); };
+      img.src = src;
+    });
+  });
+}
+document.fonts.ready.then(async () => {
+  const sprunkiImages = await loadSprunki();
+  renderAllPages({...${JSON.stringify(config)}, sprunkiImages});
+});
 <\/script>
 </body>
 </html>`;
@@ -46,15 +98,14 @@ async function doPDF(config, setStatus) {
     const pdf = new jsPDF({ format: 'a4', unit: 'mm', orientation: 'portrait' });
 
     await document.fonts.ready;
+    const sprunkiImages = await loadSprunkiImages();
 
     for (let i = 0; i < (config.pages || 1); i++) {
       const canvas = document.createElement('canvas');
       canvas.width  = pw;
       canvas.height = ph;
       const ctx = canvas.getContext('2d');
-      // No ctx.scale() — renderPage uses canvas.width/height directly.
-      // Larger canvas = higher DPI output, renderer adapts automatically.
-      renderPage(ctx, { ...cfg, pages: config.pages || 1 }, i);
+      renderPage(ctx, { ...cfg, pages: config.pages || 1, sprunkiImages }, i);
 
       if (i > 0) pdf.addPage();
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, A4_W_MM, A4_H_MM);
@@ -66,9 +117,9 @@ async function doPDF(config, setStatus) {
   }
 }
 
-function doSaveHTML(config) {
+async function doSaveHTML(config) {
   const seed = config.seed || (Math.floor(Math.random() * 99999) + 1);
-  const html = buildPrintHTML({ ...config, seed });
+  const html = await buildPrintHTML({ ...config, seed });
   const blob = new Blob([html], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -77,9 +128,9 @@ function doSaveHTML(config) {
   URL.revokeObjectURL(a.href);
 }
 
-function doPrintHTML(config) {
+async function doPrintHTML(config) {
   const seed = config.seed || (Math.floor(Math.random() * 99999) + 1);
-  const html = buildPrintHTML({ ...config, seed });
+  const html = await buildPrintHTML({ ...config, seed });
   const blob = new Blob([html], { type: 'text/html' });
   const win = window.open(URL.createObjectURL(blob), '_blank');
   if (win) win.onload = () => { win.focus(); win.print(); };
